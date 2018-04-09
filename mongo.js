@@ -10,16 +10,19 @@ var User = new Schema({
     appeal: {type: String},
     party_hold_count: {type: Number, default: 0},
     party_join_count: {type: Number, default: 0},
-    follow_up_ids: [String],
     follow_up_count: {type: Number, default: 0},
-    follow_down_ids: [String],
     follow_down_count: {type: Number, default: 0},
     like_count: {type: Number, default: 0},
     dislike_count: {type: Number, default: 0},
-    party_join_count: {type: Number, default: 0},
     create_time: {type: Date, dafault: Date.now},
     update_time: {type: Date, dafault: Date.now},
     last_access_time: {type: Date, dafault: Date.now},
+});
+
+var UserFollow = new Schema({
+    user_id: {type: String, required: true},
+    follow_up_ids: [String],
+    follow_down_ids: [String],
 });
 
 var UserLike = new Schema({
@@ -133,6 +136,7 @@ var PartyComment = new Schema({
     pic: {type: String, required: true},
     comment_id: {type: String, required: true},
     parent_comment_id: {type: String},
+    reply_to_user_id: {type: String},
     publisher_id: {type: String, required: true},
     publish_time: {type: Date, dafault: Date.now},
     reply_count: {type: Number, default: 0},
