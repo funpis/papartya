@@ -19,10 +19,21 @@ var User = new Schema({
     last_access_time: {type: Date, dafault: Date.now},
 });
 
+var UserPic = new Schema({
+    user_id: {type: String, required: true},
+    icon: {type: String},
+    pics: [{
+        upload_date: Date,
+        party_id: String,
+        comment_id: String,
+    }],
+});
+
 var UserFollow = new Schema({
     user_id: {type: String, required: true},
     follow_up_ids: [String],
     follow_down_ids: [String],
+    friend_ids: [String],
 });
 
 var UserLike = new Schema({
@@ -33,7 +44,6 @@ var UserLike = new Schema({
 });
 
 var Group = new Schema({
-    id: {type: String, required: true, unique: true},
     name: {type: String},
     owner_id: {type: String, required: true},
     member_ids: [String],
@@ -42,7 +52,6 @@ var Group = new Schema({
 });
 
 var Party = new Schema({
-    party_id: {type: String, required: true, unique: true},
     open: {type: Boolean, default: true},
     title: {type: String, required: true},
     manager_ids: [String],
@@ -99,7 +108,9 @@ var PartyPoll = new Schema({
 
 var PollTicket = new Schema({
     party_id: {type: String, required:true},
-    voter_id: {type: String, required: true},
+    voter_id: {type: String},
+    voter_name: {type: String}, // Required if voter_id is null
+    comment: {type: String},
     option_id: {type: Number, required:true},
     vote_time: {type: Date, dafault: Date.now},
 });
@@ -123,7 +134,9 @@ var PartyOption = new Schema({
 
 var OptionTicket = new Schema({
     party_id: {type: String, required: true},
-    voter_id: {type: String, required: true},
+    voter_id: {type: String},
+    voter_name: {type: String}, // Required if voter_id is null
+    comment: {type: String},
     option_id: {type: Number, required:true},
     vote_number: {type: Number, required: true},
     vote_time: {type: Date, dafault: Date.now},
@@ -132,9 +145,8 @@ var OptionTicket = new Schema({
 var PartyComment = new Schema({
     party_id: {type: String, required: true},
     poster_id: {type: String, required: true},
-    text: {type: String, required: true},
-    pic: {type: String, required: true},
-    comment_id: {type: String, required: true},
+    text: {type: String},
+    pic: {type: String},
     parent_comment_id: {type: String},
     reply_to_user_id: {type: String},
     publisher_id: {type: String, required: true},
@@ -155,6 +167,8 @@ var CommentLike = new Schema({
 
 module.exports = {
   User: mongoose.model('User', User),
+  UserPic: mongoose.model('UserPic', UserPic),
+  UserFollow: mongoose.model('UserFollow', UserFollow),
   UserLike: mongoose.model('UserLike', UserLike),
   Group: mongoose.model('Group', Group),
   Party: mongoose.model('Party', Party),
